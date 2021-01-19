@@ -29,7 +29,6 @@ public class QuestionData {
 
     public List<Question> getQuestions(final AnswerListAsyncResponse callBack) {
 
-
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
@@ -46,10 +45,7 @@ public class QuestionData {
 
                                 //Add question objects to list
                                 questionArrayList.add(question);
-                                //Log.d("Hello", "onResponse: " + question.getAnswer());
-
-
-                                // Log.d("JSON", "onResponse: " + response.getJSONArray(i).get(0));
+                                //Log.d(TAG, "onResponse: " + response.getJSONArray(i).get(0).toString());
                                 //Log.d("JSON2", "onResponse: " + response.getJSONArray(i).getBoolean(1));
 
                             } catch (JSONException e) {
