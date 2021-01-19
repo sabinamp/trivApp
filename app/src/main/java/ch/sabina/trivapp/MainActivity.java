@@ -57,8 +57,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.prevButton:
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex = (currentQuestionIndex - 1) % questionList.size();
+                    updateQuestion();
+                }
+                break;
+            case R.id.nextButton:
+                currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
+                updateQuestion();
+                break;
+            case R.id.button_true:
+                checkAnswer(true);
+                updateQuestion();
+                break;
+            case R.id.button_false:
+                checkAnswer(false);
+                updateQuestion();
+                break;
         }
 
+    }
+
+    private void checkAnswer(boolean b) {
+    }
+
+    private void updateQuestion() {
+        String question = questionList.get(currentQuestionIndex).getAnswer();
+        questionTextview.setText(question);
+        questionCounterTextview.setText(currentQuestionIndex + " / " + questionList.size()); // 0 / 234
     }
 }
