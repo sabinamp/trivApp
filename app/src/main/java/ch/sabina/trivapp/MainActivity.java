@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,12 +80,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void checkAnswer(boolean b) {
+    private void checkAnswer(boolean bInput) {
+        boolean correctAnswer = questionList.get(currentQuestionIndex).isAnswerTrue();
+        int toastMessageId = 0;
+        if (bInput == correctAnswer) {
+
+            fadeView();
+            toastMessageId = R.string.correct_answer;
+        } else {
+            executeShakeAnimation();
+            toastMessageId = R.string.wrong_answer;
+        }
+        Toast.makeText(MainActivity.this, toastMessageId,
+                Toast.LENGTH_SHORT)
+                .show();
     }
+
+
 
     private void updateQuestion() {
         String question = questionList.get(currentQuestionIndex).getAnswer();
         questionTextview.setText(question);
         questionCounterTextview.setText(currentQuestionIndex + " / " + questionList.size()); // 0 / 234
+    }
+
+    private void executeShakeAnimation() {
+    }
+
+    private void fadeView() {
     }
 }
