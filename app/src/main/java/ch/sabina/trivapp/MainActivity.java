@@ -1,10 +1,15 @@
 package ch.sabina.trivapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton prevButton;
     private int currentQuestionIndex = 0;
     private List<Question> questionList;
+    private CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +46,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         falseButton = findViewById(R.id.button_false);
         questionCounterTextview = findViewById(R.id.counter_text);
         questionTextview = findViewById(R.id.question_txt_view);
+        cardView = findViewById(R.id.cardView);
+
         nextButton.setOnClickListener(this);
         prevButton.setOnClickListener(this);
         trueButton.setOnClickListener(this);
         falseButton.setOnClickListener(this);
 
-        questionList = new QuestionData().getQuestions(new AnswerListAsyncResponse() {
-           @Override
-           public void processFinished(ArrayList<Question> questionArrayList) {
-               Log.d(TAG, "request received. Question list size is "+questionArrayList.size());
-
-           }
-       });
+        questionList = new QuestionData().getQuestions(
+                questionArrayList -> Log.d(TAG, "request received. Question list size is "+questionArrayList.size()));
     }
 
 
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void checkAnswer(boolean bInput) {
         boolean correctAnswer = questionList.get(currentQuestionIndex).isAnswerTrue();
-        int toastMessageId = 0;
+        int toastMessageId;
         if (bInput == correctAnswer) {
 
             fadeView();
@@ -105,8 +108,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void executeShakeAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake_anim);
+
+        cardView.setAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                cardView.setCardBackgroundColor(Color.RED);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                cardView.setCardBackgroundColor(Color.WHITE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     private void fadeView() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+
+        alphaAnimation.setDuration(350);
+        alphaAnimation.setRepeatCount(1);
+        alphaAnimation.setRepeatMode(Animation.REVERSE);
+
+        cardView.setAnimation(alphaAnimation);
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                cardView.setCardBackgroundColor(Color.GREEN);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                cardView.setCardBackgroundColor(Color.WHITE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 }
