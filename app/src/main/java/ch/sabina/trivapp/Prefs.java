@@ -11,17 +11,16 @@ public class Prefs {
         this.preferences = activity.getPreferences(Context.MODE_PRIVATE);
     }
 
-    public void saveHighScore(int score) {
-        int lastScore = preferences.getInt("high_score", 0);
+    public void saveLastScore(int score) {
+        int lastScore = preferences.getInt("last_score", 0);
 
-        if (score > lastScore) {
             //we have a new highest and we save it!
-            preferences.edit().putInt("high_score", score).apply();
-        }
+            preferences.edit().putInt("last_score", score).apply();
+
     }
 
-    public int getSavedHighScore() {
-        return preferences.getInt("high_score", 0);
+    public int getSavedScore() {
+        return preferences.getInt("last_score", 0);
     }
 
     public  void setIndex(int index) {

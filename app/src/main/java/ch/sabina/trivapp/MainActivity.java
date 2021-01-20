@@ -3,7 +3,6 @@ package ch.sabina.trivapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,10 +15,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.text.MessageFormat;
 import java.util.List;
 
-import ch.sabina.trivapp.data.AnswerListAsyncResponse;
 import ch.sabina.trivapp.data.QuestionData;
 import ch.sabina.trivapp.model.Question;
 import ch.sabina.trivapp.model.UserScore;
@@ -53,9 +51,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         questionTextview = findViewById(R.id.question_txt_view);
         cardView = findViewById(R.id.cardView);
         scoreTextView = findViewById(R.id.scoreTxt);
+
         prefs = new Prefs(this);
-        currentScore = new UserScore(prefs.getSavedHighScore());
-        scoreTextView.setText("Your Score : "+currentScore.getValue());
+        currentScore = new UserScore(prefs.getSavedScore());
+        scoreTextView.setText(MessageFormat.format("Current Score: {0}",currentScore.getValue()));
 
         nextButton.setOnClickListener(this);
         prevButton.setOnClickListener(this);
@@ -98,14 +97,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (bInput == correctAnswer) {
             currentScore.addScore(10);
             Log.d("Current Score", "user score increased with 10 points");
-            scoreTextView.setText("Your Score :"+ currentScore.getValue());
+            scoreTextView.setText(MessageFormat.format("Your Score: {0}", currentScore.getValue()));
             fadeView();
             toastMessageId = R.string.correct_answer;
         } else {
             executeShakeAnimation();
             toastMessageId = R.string.wrong_answer;
             currentScore.decreaseScore(10);
-            scoreTextView.setText("Your Score :" +currentScore.getValue());
+            scoreTextView.setText(MessageFormat.format("Your Score: {0}", currentScore.getValue()));
             Log.d("Current Score", "user score decreased with 10 points");
         }
         Toast.makeText(MainActivity.this, toastMessageId,
@@ -118,7 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateQuestion() {
         String question = questionList.get(currentQuestionIndex).getAnswer();
         questionTextview.setText(question);
-        questionCounterTextview.setText(currentQuestionIndex + " / " + questionList.size()); // 0 / 234
+        questionCounterTextview.setText(MessageFormat.format("{0} / {1}",
+                currentQuestionIndex , questionList.size())); // 0 / 234
     }
 
     private void executeShakeAnimation() {
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onPause() {
-        prefs.saveHighScore(currentScore.getValue());
+        prefs.saveLastScore(currentScore.getValue());
         prefs.setIndex(currentQuestionIndex);
         super.onPause();
     }
