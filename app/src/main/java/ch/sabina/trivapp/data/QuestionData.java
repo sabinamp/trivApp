@@ -1,6 +1,5 @@
 package ch.sabina.trivapp.data;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -21,7 +20,6 @@ public class QuestionData {
     private String TAG = QuestionData.class.getSimpleName();
     ArrayList<Question> questionArrayList;
     private static final String url = "https://raw.githubusercontent.com/curiousily/simple-quiz/master/script/statements-data.json";
-
 
     public QuestionData(){
         questionArrayList= new ArrayList<>();
@@ -63,7 +61,6 @@ public class QuestionData {
                 }
         );
         AppController.getInstance().addToRequestQueue(jsonArrayRequest);
-
 
         return questionArrayList;
 
